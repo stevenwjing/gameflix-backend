@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Student</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+</head>
+<body>
+<div class="container my-4">
+  <h1>Update Student</h1>
+  <form action="#" th:action="@{/saveStudent}" th:object="${student}" method="post">
+    <input type="hidden" th:field="*{sid}">
+    <div class="mb-3">
+      <label class="form-label">Student Name</label>
+      <input type="text" th:field="*{studName}" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Student Email</label>
+      <input type="text" th:field="*{studEmail}" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Enroll in Courses</label>
+      <select th:field="*{courses}" class="form-select" multiple>
+        <option th:each="course : ${allCourses}"
+                th:value="${course.id}"
+                th:text="${course.courseDept + ' ' + course.courseNum + ' - ' + course.courseName}">
+        </option>
+      </select>
+      <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Student</button>
+    <a th:href="@{/studentList}" class="btn btn-secondary">Back</a>
+  </form>
+</div>
+</body>
+</html>
