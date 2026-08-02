@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Members</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+</head>
+<body>
+<div class="container my-4">
+  <a th:href="@{/showNewMemberForm}" class="btn btn-primary mb-3">Add Member</a>
+  <a th:href="@{/}" class="btn btn-secondary mb-3">Back to Game Catalog</a>
+
+  <h1>Members List</h1>
+  <table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th>Member Name</th>
+      <th>Member Email</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="member : ${listMembers}">
+      <td th:text="${member.memberName}"></td>
+      <td th:text="${member.memberEmail}"></td>
+      <td>
+        <a th:href="@{'/showMemberFormForUpdate/' + ${member.id}}" class="btn btn-primary">Update</a>
+        <a th:href="@{'/deleteMember/' + ${member.id}}" class="btn btn-danger">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

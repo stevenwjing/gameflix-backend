@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Games - GameFlix</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+</head>
+<body>
+<div class="container my-4">
+  <a th:href="@{/}" class="btn btn-secondary mb-3">Back to Catalog</a>
+  <h1>My Games</h1>
+
+  <div th:if="${member == null}" class="alert alert-warning">
+    This account isn't linked to a member profile, so it can't hold game subscriptions.
+    (Admin accounts don't get a member profile by default.)
+  </div>
+
+  <table th:if="${member != null}" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Genre</th>
+      <th>Platform</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="game : ${allGames}">
+      <td th:text="${game.title}"></td>
+      <td th:text="${game.genre}"></td>
+      <td th:text="${game.platform}"></td>
+      <td th:text="${game.price}"></td>
+      <td>
+        <span th:if="${subscribedIds.contains(game.id)}" class="badge bg-success">Subscribed</span>
+        <span th:unless="${subscribedIds.contains(game.id)}" class="badge bg-secondary">Not subscribed</span>
+      </td>
+      <td>
+        <form th:if="${subscribedIds.contains(game.id)}" th:action="@{'/myGames/unsubscribe/' + ${game.id}}" method="post">
+          <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
+        </form>
+        <form th:unless="${subscribedIds.contains(game.id)}" th:action="@{'/myGames/subscribe/' + ${game.id}}" method="post">
+          <button type="submit" class="btn btn-sm btn-primary">Subscribe</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

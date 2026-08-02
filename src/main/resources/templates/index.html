@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
+    <title>GameFlix — Game Catalog</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
@@ -12,43 +12,58 @@
 <body>
 <div class="container my-4">
 
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>GameFlix</h1>
+        <div>
+            <span sec:authorize="isAuthenticated()" class="me-2">
+                Signed in as <strong sec:authentication="name"></strong>
+                (<span sec:authentication="authorities"></span>)
+            </span>
+            <a th:href="@{/myGames}" sec:authorize="isAuthenticated()" class="btn btn-outline-primary btn-sm">My Games</a>
+            <form th:action="@{/logout}" method="post" style="display:inline" sec:authorize="isAuthenticated()">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+            </form>
+            <a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn btn-primary btn-sm">Login</a>
+            <a th:href="@{/register}" sec:authorize="isAnonymous()" class="btn btn-outline-primary btn-sm">Register</a>
+        </div>
+    </div>
     <hr/>
 
-    <a th:href="@{/showNewCourseForm}" class="btn btn-primary mb-3">Add Course</a>
+    <a th:href="@{/showNewGameForm}" sec:authorize="hasRole('ADMIN')" class="btn btn-primary mb-3">Add Game</a>
 
-    <h1>Courses List</h1>
+    <h2>Game Catalog</h2>
 
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courseDept&sortDir=' + ${sortField == 'courseDept' ? reverseSortDir : 'asc'}}">
-                    Course Department</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=genre&sortDir=' + ${sortField == 'genre' ? reverseSortDir : 'asc'}}">
+                    Genre</a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courseNum&sortDir=' + ${sortField == 'courseNum' ? reverseSortDir : 'asc'}}">
-                    Course Number</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=platform&sortDir=' + ${sortField == 'platform' ? reverseSortDir : 'asc'}}">
+                    Platform</a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courseName&sortDir=' + ${sortField == 'courseName' ? reverseSortDir : 'asc'}}">
-                    Course Name</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${sortField == 'title' ? reverseSortDir : 'asc'}}">
+                    Title</a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courseStuds&sortDir=' + ${sortField == 'courseStuds' ? reverseSortDir : 'asc'}}">
-                    Number of Students</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=price&sortDir=' + ${sortField == 'price' ? reverseSortDir : 'asc'}}">
+                    Price</a>
             </th>
-            <th>Actions</th>
+            <th sec:authorize="hasRole('ADMIN')">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="course : ${listCourses}">
-            <td th:text="${course.courseDept}"></td>
-            <td th:text="${course.courseNum}"></td>
-            <td th:text="${course.courseName}"></td>
-            <td th:text="${course.courseStuds}"></td>
-            <td>
-                <a th:href="@{'/showFormForUpdate/' + ${course.id}}" class="btn btn-primary">Update</a>
-                <a th:href="@{'/deleteCourse/' + ${course.id}}" class="btn btn-danger">Delete</a>
+        <tr th:each="game : ${listGames}">
+            <td th:text="${game.genre}"></td>
+            <td th:text="${game.platform}"></td>
+            <td th:text="${game.title}"></td>
+            <td th:text="${game.price}"></td>
+            <td sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{'/showGameFormForUpdate/' + ${game.id}}" class="btn btn-primary">Update</a>
+                <a th:href="@{'/deleteGame/' + ${game.id}}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>
@@ -66,9 +81,9 @@
         </div>
     </div>
 
-    <div class="mt-4">
-        <a th:href="@{/showNewStudentForm}" class="btn btn-primary">Add Student</a>
-        <a th:href="@{/studentList}" class="btn btn-primary">Update A Student</a>
+    <div class="mt-4" sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/showNewMemberForm}" class="btn btn-primary">Add Member</a>
+        <a th:href="@{/memberList}" class="btn btn-primary">Manage Members</a>
     </div>
 
 </div>

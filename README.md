@@ -61,7 +61,7 @@ than being committed to the repository:
 mvn clean package
 docker build -t gameflix-backend .
 docker run -p 8080:8080 \
-  -e SPRING_DATASOURCE_URL="jdbc:mysql://host.docker.internal:3306/demo30" \
+  -e SPRING_DATASOURCE_URL="jdbc:mysql://host.docker.internal:3306/gameflix" \
   -e SPRING_DATASOURCE_USERNAME=root \
   -e SPRING_DATASOURCE_PASSWORD=yourpassword \
   gameflix-backend
